@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+
+import time
+from random import choice
+from random import randrange
+
+import zmq
+
+if __name__ == "__main__":
+    stock_symbols = ['RAX', 'EMC', 'GOOG', 'AAPL', 'RHAT', 'AMZN']
+
+    context = zmq.Context()
+    socket = context.socket(zmq.PUB)
+    socket.bind("epgm://eth0;224.0.0.1:8200")
+
+    while True:
+        time.sleep(3)
+        # pick a random stock symbol
+        stock_symbol = choice(stock_symbols)
+        # set a random stock price
+        stock_price = randrange(1, 100)
+
+        # compose the message
+        msg = "{0} ${1}".format(stock_symbol, stock_price)
+
+        print("Sending Message: {0}".format(msg))
+
+        # send the message
+        socket.send_string(msg)
+        # Python3 Note: Use the below line and comment
+        # the above line out
+        # socket.send_string(msg)

@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+#
+# Automatically starts the docker image with the right
+# parameters to share the PWD as image:/root as well
+# as the shared network configuration.
+#
+
+docker run -v $(pwd)/ztest:/root/ztest --net=host -it arm-zmq-image /bin/bash

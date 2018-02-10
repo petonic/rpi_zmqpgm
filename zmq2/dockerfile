@@ -1,0 +1,35 @@
+FROM resin/rpi-raspbian
+
+MAINTAINER Mike Petonic <petonic@yahoo.com>
+
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libsodium-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y git build-essential libtool autoconf automake pkg-config unzip libkrb5-dev
+
+#
+# OpenPGM
+#
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libpgm-dev
+
+#
+# libzmq 4.2.4
+#
+RUN mkdir /libzmq-src
+COPY libzmq /libzmq-src
+RUN cd /libzmq-src && ./autogen.sh && ./configure --with-pgm && make && \
+     make install && ldconfig
+# RUN rm /tmp/* -rf
+
+#
+# pyzmq
+#
+RUN apt-get install -y python-dev python3-dev
+RUN apt-get install -y python-pip python3-pip
+RUN python2 -m pip install pyzmq
+RUN python3 -m pip install pyzmq
+
+#
+# Misc utilities
+#
+
+RUN apt-get install -y joe less
