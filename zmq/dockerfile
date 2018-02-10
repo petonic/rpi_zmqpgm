@@ -1,6 +1,6 @@
 FROM resin/rpi-raspbian
 
-MAINTAINER ZeroMQ Project <zeromq@imatix.com>
+MAINTAINER Mike Petonic <petonic@yahoo.com>
 
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y git build-essential libtool autoconf automake pkg-config unzip libkrb5-dev
@@ -9,4 +9,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libpgm-dev
 RUN cd /tmp && git clone --depth 1 git://github.com/zeromq/libzmq.git && cd libzmq && ./autogen.sh && ./configure --with-pgm && make
 # RUN cd /tmp/libzmq && make check
 RUN cd /tmp/libzmq && make install && ldconfig
-RUN rm /tmp/* -rf
+# RUN rm /tmp/* -rf
+
+#
+# pyzmq
+#
+RUN apt-get install python-dev python3-dev
+RUN apt-get install -y python-pip python3-pip
+RUN python2 -m pip install pyzmq
+RUN python3 -m pip install pyzmq
